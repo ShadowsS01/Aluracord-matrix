@@ -3,7 +3,7 @@ import React from 'react';
 import appConfig from '../config.json';
 import { useRouter } from 'next/router'
 import { createClient } from '@supabase/supabase-js';
-import { ButtonSendSticker } from '../src/components/ButtonSendSticker'
+import { ButtonSendSticker, Header, Sticker } from "../src/components/exportComponents"
 
 // Como fazer AJAX: https://medium.com/@omariosouto/entendendo-como-fazer-ajax-com-a-fetchapi-977ff20da3c6
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ3NTI2NSwiZXhwIjoxOTU5MDUxMjY1fQ.y_oyuscV6B8FGi_MLwTmxNfFFH8Sxr21R7LIJwQWEeY'
@@ -31,13 +31,10 @@ export default function ChatPage() {
             .select('*')
             .order('id', { ascending: false })
             .then(({ data }) => {
-                // console.log('Dados da consulta:', data);
                 setListaDeMensagens(data);
             });
         
             const subscription = escutaMensagensEmTempoReal((novaMensagem) => {
-            console.log('Nova mensagem:', novaMensagem);
-            console.log('listaDeMensagens:', listaDeMensagens);
             // Quero reusar um valor de referencia (objeto/array) 
             // Passar uma função pro setState
         
@@ -46,7 +43,6 @@ export default function ChatPage() {
             //     ...listaDeMensagens
             // ])
             setListaDeMensagens((valorAtualDaLista) => {
-                console.log('valorAtualDaLista:', valorAtualDaLista);
                 return [
                 novaMensagem,
                 ...valorAtualDaLista,
@@ -148,19 +144,24 @@ export default function ChatPage() {
                         <TextField
                             value={mensagem}
                             onChange={(event) => {
-                                const valor = event.target.value;
-                                setMensagem(valor);
+                                setMensagem(event.target.value);
                             }}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
-                                    event.preventDefault();
-                                    handleNovaMensagem(mensagem);
+                                    if (mensagem === '') {
+                                        event.preventDefault();
+                                    }
+                                    else{
+                                        event.preventDefault();
+                                        handleNovaMensagem(mensagem);
+                                    }
                                 }
                             }}
                             placeholder="Insira sua mensagem aqui..."
                             type="textarea"
                             styleSheet={{
-                                height: '45px',
+                                display: 'flex',
+                                height: '50px',
                                 width: '100%',
                                 border: '0',
                                 resize: 'none',
@@ -181,13 +182,18 @@ export default function ChatPage() {
                         <Button
                             value={mensagem}
                             onChange={(event) => {
-                                const valor = event.target.value;
-                                setMensagem(valor);
+                                setMensagem(event.target.value);
                             }}
                             type='submit'
-                            label='Enviar'
+                            iconName='arrowRight'
+                            disabled={mensagem === ''}
                             styleSheet={{
-                                height: '45px',
+                                textAlign: 'center',
+                                borderRadius: '50%',
+                                minWidth: '50px',
+                                minHeight: '50px',
+                                marginRight: '15px',
+                                marginLeft: '10px',
                                 borderRadius: '5px',
                                 backgroundColor: appConfig.theme.colors.primary[500],
                                 marginBottom: '7px',
@@ -205,39 +211,42 @@ export default function ChatPage() {
     )
 }
 
-function Header() {
-    return (
-        <>
-            <Box styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
-                <Text variant='heading5'>
-                    Chat
-                </Text>
-                <Button
-                    variant='tertiary'
-                    colorVariant='neutral'
-                    label='Logout'
-                    href="/"
-                />
-            </Box>
-        </>
-    )
+function generateDate(string) {
+    var time = new Date(string).toLocaleTimeString().substring(0, 5)
+    var date
+    switch (new Date().getDay() - new Date(string).getDay()) {
+        case 0:
+            date = "Hoje"
+            break
+        case 1:
+            date = "Ontem"
+            break
+        case 2:
+            date = "Anteontem"
+            break
+        default:
+            time = ""
+            date = format(new Date(), 'dd/MM/yyyy - HH:mm')
+            // date = new Date(string).toLocaleDateString()
+    }
+    return `${date} ${time}`
 }
 
-function MessageList(props) {
-    console.log(props);
+export function MessageList(props) {
     return (
         <Box
             tag="ul"
             styleSheet={{
-                overflow: 'auto',
+                overflowY: 'auto',
                 display: 'flex',
-                flexDirection: 'column-reverse',
+                flexDirection: "column-reverse",
                 flex: 1,
                 color: appConfig.theme.colors.neutrals["000"],
                 marginBottom: '16px',
+                paddingRight: "10px",
             }}
         >
-            {props.mensagens.map((mensagem) => {
+            {props.mensagens.map(mensagem => {
                 return (
                     <Text
                         key={mensagem.id}
@@ -246,56 +255,62 @@ function MessageList(props) {
                             borderRadius: '5px',
                             padding: '6px',
                             marginBottom: '12px',
+                            maxWidth: "90vw",
                             hover: {
                                 backgroundColor: appConfig.theme.colors.neutrals[700],
-                            }
+                            },
+                            whiteSpace: "pre-line",
+                            fontFamily: "'Outfit', sans-serif",
                         }}
                     >
                         <Box
                             styleSheet={{
                                 marginBottom: '8px',
+                                display: "flex",
+                                justifyContent: "space-between"
                             }}
                         >
-                            <Image
+                            <Box
                                 styleSheet={{
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    display: 'inline-block',
-                                    marginRight: '8px',
+                                    display: "flex",
+                                    alignItems: "center",
                                 }}
-                                src={`https://github.com/${mensagem.de}.png`}
-                            />
-                            <Text tag="strong">
-                                {mensagem.de}
-                            </Text>
-                            <Text
-                                styleSheet={{
-                                    fontSize: '10px',
-                                    marginLeft: '8px',
-                                    color: appConfig.theme.colors.neutrals[300],
-                                }}
-                                tag="span"
                             >
-                                {(new Date().toLocaleDateString())}
-                            </Text>
+                                <Image
+                                    styleSheet={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '50%',
+                                        display: 'inline-block',
+                                        marginRight: '5px',
+                                    }}
+                                    src={`https://github.com/${mensagem.de}.png`}
+                                />
+                                <Text tag="strong" styleSheet={{
+                                    fontFamily: "'Outfit', sans-serif",
+                                    fontSize: "15px",
+                                }}>
+                                    {mensagem.de}
+                                </Text>
+                                <Text
+                                    styleSheet={{
+                                        fontSize: '10px',
+                                        marginLeft: '8px',
+                                        color: appConfig.theme.colors.neutrals[300],
+                                    }}
+                                    tag="span"
+                                >
+                                    {generateDate(mensagem.created_at)}
+                                </Text>
+                            </Box>
                         </Box>
-                        {/* [Declarativo] */}
-                        {/* Condicional: {mensagem.texto.startsWith(':sticker:').toString()} */}
-                        {mensagem.texto.startsWith(':sticker:')
-                        ? (
-                            <Image src={mensagem.texto.replace(':sticker:', '')} />
-                        )
-                        : (
-                            mensagem.texto
-                        )}
-                        {/* if mensagem de texto possui stickers:
-                                    mostra a imagem
-                                    else 
-                                    mensagem.texto */}
-                        {/* {mensagem.texto} */}
+                        {
+                            mensagem.texto.startsWith(":sticker:") ?
+                                (<Sticker src={mensagem.texto.replace(":sticker:", "")} />) :
+                                (mensagem.texto)
+                        }
                     </Text>
-                );
+                )
             })}
         </Box>
     )

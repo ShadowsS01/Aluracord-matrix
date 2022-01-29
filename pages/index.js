@@ -2,6 +2,7 @@ import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useState, useEffect } from 'react';
 
 
 function Titulo(props) {
@@ -20,23 +21,29 @@ function Titulo(props) {
     )
 }
 
-// Componentes React
-// function HomePage() {
-//     // JSX
-//     return (
-//         <div>
-//             <GlobalStyle />
-//             <Titulo tag="h2">Boas vindas de volta!</Titulo>
-//             <h2>Discord - Alura Matrix</h2>
-//         </div>
-//     )
-// }
-// export default HomePage
-
 export default function PaginaInicial() {
-    // const username = 'omariosouto';
     const [username, setUsername] = React.useState('');
+    const [name, setName] = React.useState('')
     const roteamento = useRouter();
+
+    // Conexão à api GitHub
+    useEffect(() => {
+
+        fetch(`https://api.github.com/users/${username}`)
+            .then(async (resposta) => {
+                let dados = await resposta.json()
+                const name = dados.name
+                setName(name)
+            })
+    })
+
+    function usernameValido(usuario) {
+
+        if (usuario.length > 2) {
+
+            return usuario
+        }
+    }
 
     return (
         <>
@@ -66,9 +73,8 @@ export default function PaginaInicial() {
                     {/* Formulário */}
                     <Box
                         as="form"
-                        onSubmit={function (infosDoEvento){
-                            infosDoEvento.preventDefault();
-                            // console.log('Alguém submeteu o form');
+                        onSubmit={function (event){
+                            event.preventDefault();
                             // roteamento.push('/chat?username=' + username);
                             roteamento.push(`/chat?username=${username}`);
                             // window.location.href = '/chat';
@@ -100,12 +106,7 @@ export default function PaginaInicial() {
                             placeholder='Seu GitHub:'
                             value={username}
                             onChange={function (event) {
-                                // console.log('usuario digitou', event.target.value);
-                                // Onde ta o valor?
-                                const valor = event.target.value;
-                                // Trocar o valor da variavel
-                                // através do React e avise quem precisa
-                                setUsername(valor);
+                                setUsername(event.target.value)
                             }}
                             fullWidth
                             textFieldColors={{
@@ -117,7 +118,14 @@ export default function PaginaInicial() {
                                 },
                             }}
                         />
+
+                        {/* Verificação */}
+                        {/* {!usernameValido(username) && username.length !== 0
+                            ? <span>Preencha o campo com um usuário válido</span>
+                            : ''} */}
+                        
                         <Button
+                            disabled={!usernameValido(username)}
                             type='submit'
                             label='Entrar'
                             fullWidth
@@ -153,8 +161,29 @@ export default function PaginaInicial() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                            src={`https://github.com/${username}.png`}
+                            src={!usernameValido(username) ?
+                                "https://openclipart.org/download/247319/abstract-user-flat-3.svg" :
+                                `https://github.com/${username}.png`
+                            }
+                            onError={function (event) {
+                                event.target.src = "https://openclipart.org/download/247319/abstract-user-flat-3.svg"
+                                {!usernameValido(username) && username.length !== 0
+                                    ? <span>Usuário não encontrado!</span>
+                                    : ''}
+                            }}
                         />
+                        <Text name
+                            variant="body4"
+                            styleSheet={{
+                                color: appConfig.theme.colors.neutrals[200],
+                                backgroundColor: appConfig.theme.colors.neutrals[900],
+                                padding: '3px 10px',
+                                borderRadius: '1000px'
+                            }}
+                        >
+                            {usernameValido(username) ? name : ""}
+                        </Text>
+                        
                         <Text
                             variant="body4"
                             styleSheet={{
@@ -164,8 +193,10 @@ export default function PaginaInicial() {
                                 borderRadius: '1000px'
                             }}
                         >
-                            {username}
+                            {usernameValido(username) ? username : ""}
                         </Text>
+
+                        
                     </Box>
                     {/* Photo Area */}
                 </Box>
