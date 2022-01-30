@@ -226,8 +226,8 @@ function generateDate(string) {
             break
         default:
             time = ""
-            date = format(new Date(), 'dd/MM/yyyy - HH:mm')
-            // date = new Date(string).toLocaleDateString()
+            // date = format(new Date(), 'dd/MM/yyyy - HH:mm')
+            date = new Date(string).toLocaleDateString()
     }
     return `${date} ${time}`
 }
