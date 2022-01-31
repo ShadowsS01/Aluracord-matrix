@@ -30,6 +30,13 @@ git clone https://github.com/ShadowsS01/Aluracord-matrix.git
 cd Aluracord-matrix
 ```
 
+3. Coloque sua Anon Key e URL do seu Banco de Dados [Supabase](https://supabase.com/) em pages/chat.js
+
+```
+const SUPABASE_ANON_KEY = 'Coloque sua Anon Key aqui'
+const SUPABASE_URL = 'Coloque a URL aqui'
+```
+
 3. Instale as dependências.
 
 ```
