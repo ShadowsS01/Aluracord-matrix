@@ -12,11 +12,12 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Node.js](https://nodejs.dev)
 - [React](https://pt-br.reactjs.org)
 - [Next](https://nextjs.org)
+- [Supabase](https://github.com/supabase/supabase)
 - [SkynexUI](https://skynexui.dev)
 
 ## Como executar o projeto
 
-Para executar o projeto você precisa ter o [Node.js](https://nodejs.dev) e o [Git](https://git-scm.com) instalados na sua maquina. Você também precisará de um editor de textos, eu utilizei o [VSCode](https://code.visualstudio.com).
+Para executar o projeto você precisa ter o [Node.js](https://nodejs.dev) e o [Git](https://git-scm.com) instalados na sua maquina. Você também precisará do [Supabase](https://supabase.com/) e de um editor de código, eu utilizei o [VSCode](https://code.visualstudio.com).
 
 1. Clone esse repositório.
 
