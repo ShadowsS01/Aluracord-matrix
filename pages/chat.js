@@ -6,8 +6,8 @@ import { createClient } from '@supabase/supabase-js';
 import { ButtonSendSticker, Header, Sticker } from "../src/components/exportComponents"
 
 // Como fazer AJAX: https://medium.com/@omariosouto/entendendo-como-fazer-ajax-com-a-fetchapi-977ff20da3c6
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ3NTI2NSwiZXhwIjoxOTU5MDUxMjY1fQ.y_oyuscV6B8FGi_MLwTmxNfFFH8Sxr21R7LIJwQWEeY'
-const SUPABASE_URL = 'https://wikrcuzkratlchwnvvts.supabase.co'
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function escutaMensagensEmTempoReal(adicionaMensagem) {
