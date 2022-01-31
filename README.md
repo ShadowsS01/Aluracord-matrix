@@ -5,7 +5,7 @@
 
 Projeto usando Next.js.
 
-## Tecnologias
+## Tecnologias e libs utilizadas:
 
 As seguintes ferramentas foram usadas na construção do projeto:
 
