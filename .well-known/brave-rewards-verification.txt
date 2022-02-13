@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: aluracord-matrix2.vercel.app
+Token: 0c66d7e6d925568160ffb5b5da0739ed5a1d6a267fee6b1d6254d36575651f2b
