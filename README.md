@@ -11,7 +11,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 - [Node.js](https://nodejs.dev)
 - [React](https://pt-br.reactjs.org)
-- [Next](https://nextjs.org)
+- [Next.Js](https://nextjs.org)
 - [Supabase](https://github.com/supabase/supabase)
 - [SkynexUI](https://skynexui.dev)
 
