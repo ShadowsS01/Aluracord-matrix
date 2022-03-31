@@ -1,7 +1,6 @@
 # Aluracord-matrix
 
 [![licence mit](https://img.shields.io/badge/licence-MIT-blue)](LICENSE)
-[![website](https://img.shields.io/website?down_color=red&down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Faluracord-matrix2.vercel.app%2F)](https://aluracord-matrix2.vercel.app/)
 
 Projeto Next.Js tendo como base o Discord!
 
